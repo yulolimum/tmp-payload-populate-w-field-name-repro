@@ -1,0 +1,44 @@
+diff --git a/node_modules/payload/dist/fields/hooks/afterRead/relationshipPopulationPromise.js b/node_modules/payload/dist/fields/hooks/afterRead/relationshipPopulationPromise.js
+index d853052..336c9ae 100644
+--- a/node_modules/payload/dist/fields/hooks/afterRead/relationshipPopulationPromise.js
++++ b/node_modules/payload/dist/fields/hooks/afterRead/relationshipPopulationPromise.js
+@@ -17,19 +17,26 @@ const populate = async ({ currentDepth, data, dataReference, depth, draft, fallb
+             id = id.toString();
+         }
+         if (shouldPopulate) {
+-            relationshipValue = await req.payloadDataLoader.load(createDataloaderCacheKey({
+-                collectionSlug: relatedCollection.config.slug,
+-                currentDepth: currentDepth + 1,
+-                depth,
+-                docID: id,
+-                draft,
+-                fallbackLocale,
+-                locale,
+-                overrideAccess,
+-                select: populateArg?.[relatedCollection.config.slug] ?? relatedCollection.config.defaultPopulate,
+-                showHiddenFields,
+-                transactionID: req.transactionID
+-            }));
++            const populateOverride =
++                populateArg?.[relatedCollection.config.slug] || populateArg?.[field.name]
++                ? { ...populateArg?.[relatedCollection.config.slug], ...populateArg?.[field.name] }
++                : undefined
++        
++            const relationshipValue = await req.payloadDataLoader.load(
++                createDataloaderCacheKey({
++                    collectionSlug: relatedCollection.config.slug,
++                    currentDepth: currentDepth + 1,
++                    depth,
++                    docID: id,
++                    draft,
++                    fallbackLocale,
++                    locale,
++                    overrideAccess,
++                    select: populateOverride ?? relatedCollection.config.defaultPopulate,
++                    showHiddenFields,
++                    transactionID: req.transactionID,
++                })
++            )
+         }
+         if (!relationshipValue) {
+             // ids are visible regardless of access controls
