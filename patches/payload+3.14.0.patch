@@ -24,7 +24,7 @@ index d853052..336c9ae 100644
 +                ? { ...populateArg?.[relatedCollection.config.slug], ...populateArg?.[field.name] }
 +                : undefined
 +        
-+            const relationshipValue = await req.payloadDataLoader.load(
++            relationshipValue = await req.payloadDataLoader.load(
 +                createDataloaderCacheKey({
 +                    collectionSlug: relatedCollection.config.slug,
 +                    currentDepth: currentDepth + 1,

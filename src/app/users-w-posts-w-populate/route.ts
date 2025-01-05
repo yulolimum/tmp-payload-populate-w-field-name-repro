@@ -11,6 +11,7 @@ export const GET = async () => {
     },
     select: {
       posts: true,
+      myPosts: true,
     },
     populate: {
       posts: {

@@ -10,6 +10,7 @@ export const GET = async () => {
       id: { exists: true },
     },
     select: {
+      posts: true,
       myPosts: true,
     },
     populate: {
